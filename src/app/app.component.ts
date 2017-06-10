@@ -26,7 +26,6 @@ export class AppComponent implements OnInit, OnDestroy {
   firebaseDB = firebase.database().ref(FAVORITE_THINGS_PATH)
 
   constructor(db: AngularFireDatabase) {
-
   }
 
   ngOnInit(): void {
