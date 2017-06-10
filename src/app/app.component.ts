@@ -11,6 +11,7 @@ import * as firebase from 'firebase/app';
 
 const FAVORITE_THINGS_PATH = 'favoriteThings';
 const COLOR_PATH = 'color';
+const NUMBER_PATH = 'number';
 const VALUE = 'value';
 
 @Component({
@@ -22,15 +23,18 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'Favorite Things';
   favoriteColor = 'gray';
   favoriteNumber = 0;
-  firebaseDB = firebase.database().ref(FAVORITE_THINGS_PATH).child(COLOR_PATH);
+  firebaseDB = firebase.database().ref(FAVORITE_THINGS_PATH)
 
   constructor(db: AngularFireDatabase) {
 
   }
 
   ngOnInit(): void {
-    this.firebaseDB.on(VALUE, (snapshot: firebase.database.DataSnapshot) => {
-      this.favoriteColor = snapshot.val();
+    this.firebaseDB.child(COLOR_PATH).on(VALUE, (snapshot: firebase.database.DataSnapshot) => {
+       this.favoriteColor = snapshot.val();
+    });
+    this.firebaseDB.child(NUMBER_PATH).on(VALUE, (snapshot: firebase.database.DataSnapshot) => {
+      this.favoriteNumber = snapshot.val();
     });
   }
 
@@ -39,15 +43,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
 
-  setColor(selectedColor: string): void {
-    this.firebaseDB.set(selectedColor);
-  }
-
-  updateColor(): void {
-
+  setColor(color: string): void {
+    this.firebaseDB.child(COLOR_PATH).set(color);
   }
 
   setNumber(number: number): void {
-    this.favoriteNumber = number;
+    this.firebaseDB.child(NUMBER_PATH).set(number);
   }
 }
